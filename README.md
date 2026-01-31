@@ -30,4 +30,8 @@ Este projeto apresenta uma automação avançada para o setor imobiliário, inte
 * Uma instância da Evolution API configurada.
 * Criar a tabela  no Supabase antes de rodar.
 
-## Para criar a tabela e 
+## 🛠️ Configuração do Banco de Dados (Supabase)
+Crie um novo projeto no Supabase.
+Vá até a aba SQL Editor.
+Copie o conteúdo do arquivo database_setup.sql deste repositório e execute-o.
+Isso irá habilitar a extensão pgvector, criar a tabela necessária e a função de busca por similaridade.
