@@ -1,0 +1,125 @@
+{
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [-3776, -240],
+      "id": "manual-trigger-node",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "[ID_DO_ARQUIVO_GOOGLE_DRIVE]"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [-3552, -240],
+      "id": "drive-download-node",
+      "name": "Download file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "REMOVIDO",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "field-content",
+              "name": "content",
+              "value": "COLOQUE AQUI O TEXTO DO SEU MEMORIAL DESCRITIVO OU USE O ARQUIVO DO DRIVE",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [-3328, -240],
+      "id": "set-content-node",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "mode": "insert",
+        "tableName": {
+          "__rl": true,
+          "value": "condominios",
+          "mode": "list"
+        },
+        "options": {
+          "queryName": "match_documents"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "typeVersion": 1.3,
+      "position": [-3072, -240],
+      "id": "supabase-upsert-node",
+      "name": "Supabase Vector Store1",
+      "credentials": {
+        "supabaseApi": {
+          "id": "REMOVIDO",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1.2,
+      "position": [-3104, -16],
+      "id": "embeddings-node",
+      "name": "Embeddings OpenAI1",
+      "credentials": {
+        "openAiApi": {
+          "id": "REMOVIDO",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "textSplittingMode": "custom",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+      "typeVersion": 1.1,
+      "position": [-2976, -16],
+      "id": "loader-node",
+      "name": "Default Data Loader"
+    },
+    {
+      "parameters": {
+        "chunkSize": 1000,
+        "chunkOverlap": 200,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.textSplitterRecursiveCharacterTextSplitter",
+      "typeVersion": 1,
+      "position": [-2992, 192],
+      "id": "splitter-node",
+      "name": "Recursive Character Text Splitter"
+    }
+  ],
+  "connections": {
+    "When clicking ‘Execute workflow’": { "main": [[{ "node": "Download file", "type": "main", "index": 0 }]] },
+    "Download file": { "main": [[{ "node": "Edit Fields1", "type": "main", "index": 0 }]] },
+    "Edit Fields1": { "main": [[{ "node": "Supabase Vector Store1", "type": "main", "index": 0 }]] },
+    "Embeddings OpenAI1": { "ai_embedding": [[{ "node": "Supabase Vector Store1", "type": "ai_embedding", "index": 0 }]] },
+    "Default Data Loader": { "ai_document": [[{ "node": "Supabase Vector Store1", "type": "ai_document", "index": 0 }]] },
+    "Recursive Character Text Splitter": { "ai_textSplitter": [[{ "node": "Default Data Loader", "type": "ai_textSplitter", "index": 0 }]] }
+  }
+}
