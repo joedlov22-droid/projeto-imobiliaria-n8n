@@ -24,3 +24,10 @@ Este projeto apresenta uma automação avançada para o setor imobiliário, inte
 1. Baixe o arquivo `AGENTE IMOBILIARIA.json` deste repositório.
 2. No seu n8n, vá em **Workflows** > **Import from File**.
 3. Selecione o arquivo baixado e configure suas credenciais de IA.
+   ## para usar o json precisa:
+* Uma conta OpenAI (API Key).
+* Um banco de dados Supabase com a extensão pgvector.
+* Uma instância da Evolution API configurada.
+* Criar a tabela  no Supabase antes de rodar.
+
+## Para criar a tabela e 
